@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -91,6 +92,12 @@
                                     <action selector="saveJoke:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bqc-C9-2Zz"/>
                                 </connections>
                             </button>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WWY-Xs-yNR">
+                                <rect key="frame" x="37" y="379" width="320" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="oqg-q0-v0z" userLabel="height = 200"/>
+                                </constraints>
+                            </pickerView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -101,11 +108,13 @@
                             <constraint firstItem="nbm-JH-0sU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="FAL-zq-Fyr"/>
                             <constraint firstItem="UAw-4r-vTI" firstAttribute="leading" secondItem="fRR-41-vlD" secondAttribute="trailing" constant="8.3300000000000001" id="GRZ-OB-8mz"/>
                             <constraint firstItem="46i-l0-4TX" firstAttribute="top" secondItem="nbm-JH-0sU" secondAttribute="bottom" constant="30" id="GUG-XU-VeQ"/>
+                            <constraint firstItem="WWY-Xs-yNR" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="I8A-xi-AxZ"/>
                             <constraint firstItem="SpB-43-9hr" firstAttribute="leading" secondItem="46i-l0-4TX" secondAttribute="trailing" constant="31" id="M45-FN-lNG"/>
                             <constraint firstItem="46i-l0-4TX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="cqw-lk-0Xh"/>
                             <constraint firstItem="fRR-41-vlD" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dWC-r4-fG9"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="UAw-4r-vTI" secondAttribute="trailing" constant="16" id="jMm-HY-Htu"/>
                             <constraint firstItem="UAw-4r-vTI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="m2l-3e-O1b"/>
+                            <constraint firstItem="WWY-Xs-yNR" firstAttribute="top" secondItem="46i-l0-4TX" secondAttribute="bottom" constant="16" id="vTe-Ib-PYP"/>
                             <constraint firstItem="SpB-43-9hr" firstAttribute="top" secondItem="46i-l0-4TX" secondAttribute="top" id="w3f-sM-ln8"/>
                         </constraints>
                     </view>
@@ -114,6 +123,7 @@
                         <outlet property="goToSavedButton" destination="UAw-4r-vTI" id="4qO-dg-mbP"/>
                         <outlet property="jokeView" destination="46i-l0-4TX" id="s4E-af-obM"/>
                         <outlet property="newJokeButton" destination="nbm-JH-0sU" id="zqT-DU-PeI"/>
+                        <outlet property="pickerView" destination="WWY-Xs-yNR" id="B9k-m6-6jj"/>
                         <outlet property="saveJokeButton" destination="SpB-43-9hr" id="fUl-Ca-R4D"/>
                     </connections>
                 </viewController>
@@ -173,6 +183,9 @@
                                                     <buttonConfiguration key="configuration" style="plain">
                                                         <imageReference key="image" image="trash" catalog="system" symbolScale="medium"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="deleteButtonPressed:" destination="tQC-b5-kV1" eventType="touchUpInside" id="8GR-uF-ht4"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -185,6 +198,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="deleteButton" destination="Wlh-2C-fTG" id="7BQ-5l-eij"/>
                                             <outlet property="jokeView" destination="ZSM-50-NMJ" id="0Rg-uR-a0H"/>
                                         </connections>
                                     </tableViewCell>

@@ -9,6 +9,8 @@ import Moya
 
 protocol NetworkManagerProtocol {
     func fetchJoke(completion: @escaping (Result<JokeStruct, Error>) -> Void)
+    func fetchJokeCategory(_ category: String, completion: @escaping (Result<JokeStruct, Error>) -> Void)
+    func fetchCategories(completion: @escaping (Result<[String], Error>) -> Void)
 }
 
 final class NetworkManger: NetworkManagerProtocol {
@@ -17,6 +19,14 @@ final class NetworkManger: NetworkManagerProtocol {
 
     func fetchJoke(completion: @escaping (Result<JokeStruct, Error>) -> Void) {
         request(target: .getJoke, completion: completion)
+    }
+    
+    func fetchJokeCategory(_ category: String, completion: @escaping (Result<JokeStruct, Error>) -> Void) {
+        request(target: .getJokeCategory(category: category), completion: completion)
+    }
+    
+    func fetchCategories(completion: @escaping (Result<[String], Error>) -> Void) {
+        request(target: .getCategories, completion: completion)
     }
 }
 

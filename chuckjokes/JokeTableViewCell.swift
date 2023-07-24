@@ -7,12 +7,19 @@
 
 import UIKit
 
+protocol JokeTableViewCellDelegate {
+    func deleteCell(_ jokeIndexPath: IndexPath)
+}
+
 
 final class JokeTableViewCell: UITableViewCell {
 
     
     
     @IBOutlet weak var jokeView: UILabel!
+    @IBOutlet weak var deleteButton: UIButton!
+    var delegate: JokeTableViewCellDelegate?
+    var indexPath: IndexPath?
     
     
     var thisJoke: Joke?
@@ -35,5 +42,8 @@ final class JokeTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         jokeView.text = nil
+    }
+    @IBAction func deleteButtonPressed(_ sender: Any) {
+        delegate?.deleteCell(indexPath!)
     }
 }
