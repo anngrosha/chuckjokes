@@ -89,7 +89,6 @@ extension SavedJokesViewController: JokeTableViewCellDelegate {
         let joke = frc.object(at: jokeIndexPath)
         PersistentContainer.shared.viewContext.delete(joke)
         PersistentContainer.shared.saveContext()
-        delegate?.goBack()
     }
     
     

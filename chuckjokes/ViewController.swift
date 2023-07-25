@@ -52,7 +52,6 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
         } catch {
             print(error)
         }
-        self.view.backgroundColor = .white
         jokeView.numberOfLines = 0
         chuckImageVIew.download(from: "https://img.icons8.com/plasticine/12x/chuck-norris.png")
         loadCategories()
@@ -87,12 +86,6 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
                 self.thisJokeSaved = newJoke
                 PersistentContainer.shared.saveContext(backgroundContext: backgroundTask)
             }
-        } else {
-            saveJokeButton.isSelected = false
-            
-            PersistentContainer.shared.viewContext.delete(self.thisJokeSaved!)
-            self.thisJokeSaved = nil
-            PersistentContainer.shared.saveContext()
         }
     }
     
@@ -109,6 +102,7 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
     
     @IBAction func newJokePushed(_ sender: Any) {
+        saveJokeButton.isSelected = false
         loadNewJoke()
     }
     
