@@ -9,6 +9,8 @@ import Moya
 
 enum APITarget {
     case getJoke
+    case getJokeCategory(category: String)
+    case getCategories
 }
 
 extension APITarget: TargetType {
@@ -24,6 +26,10 @@ extension APITarget: TargetType {
         switch self {
         case .getJoke:
             return "/random"
+        case .getJokeCategory:
+            return "/random"
+        case .getCategories:
+            return "/categories"
         }
     }
     
@@ -34,6 +40,14 @@ extension APITarget: TargetType {
     var task: Moya.Task {
         switch self {
         case .getJoke:
+            return .requestParameters(parameters: [
+                :
+            ], encoding: URLEncoding.default)
+        case let .getJokeCategory(category):
+            return .requestParameters(parameters: [
+                "category" : category
+            ], encoding: URLEncoding.default)
+        case .getCategories:
             return .requestParameters(parameters: [
                 :
             ], encoding: URLEncoding.default)

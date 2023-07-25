@@ -64,6 +64,8 @@ class SavedJokesViewController: UIViewController, UITableViewDataSource, UITable
         
         jokeCell.setUpData(joke)
         jokeCell.jokeView.numberOfLines = 0
+        jokeCell.delegate = self
+        jokeCell.indexPath = indexPath
         
         return jokeCell
     }
@@ -78,5 +80,16 @@ class SavedJokesViewController: UIViewController, UITableViewDataSource, UITable
     @IBAction func goBackPushed(_ sender: Any) {
         delegate?.goBack()
     }
+    
+}
+
+
+extension SavedJokesViewController: JokeTableViewCellDelegate {
+    func deleteCell(_ jokeIndexPath: IndexPath) {
+        let joke = frc.object(at: jokeIndexPath)
+        PersistentContainer.shared.viewContext.delete(joke)
+        PersistentContainer.shared.saveContext()
+    }
+    
     
 }

@@ -36,9 +36,14 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     @IBOutlet weak var chuckImageVIew: UIImageView!
     @IBOutlet weak var newJokeButton: UIButton!
     
+    @IBOutlet weak var pickerView: UIPickerView!
     private var thisJoke: JokeStruct?
+    private var thisJokeSaved: Joke?
     
     private let manager: NetworkManagerProtocol = NetworkManger()
+    private var categories: [String] = ["any"]
+    private var thisCategory: String = "any"
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,19 +52,40 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
         } catch {
             print(error)
         }
-        self.view.backgroundColor = .white
         jokeView.numberOfLines = 0
         chuckImageVIew.download(from: "https://img.icons8.com/plasticine/12x/chuck-norris.png")
+        loadCategories()
         loadNewJoke()
+        pickerView.dataSource = self
+        pickerView.delegate = self
+    }
+    
+    func loadCategories() {
+        if self.categories.count == 1 {
+            manager.fetchCategories { result in
+                switch result {
+                case let .success(response):
+                    for category in response {
+                        self.categories.append(category)
+                    }
+                case let .failure(error):
+                    print(error)
+                }
+            }
+            pickerView.reloadComponent(0)
+        }
     }
 
     @IBAction func saveJoke(_ sender: Any) {
-        saveJokeButton.isSelected = true
-        PersistentContainer.shared.performBackgroundTask { backgroundTask in
-            let newJoke = Joke(context: backgroundTask)
-            newJoke.id = self.thisJoke?.id
-            newJoke.jokeText = self.thisJoke?.value
-            PersistentContainer.shared.saveContext(backgroundContext: backgroundTask)
+        if !saveJokeButton.isSelected {
+            saveJokeButton.isSelected = true
+            PersistentContainer.shared.performBackgroundTask { backgroundTask in
+                let newJoke = Joke(context: backgroundTask)
+                newJoke.id = self.thisJoke?.id
+                newJoke.jokeText = self.thisJoke?.value
+                self.thisJokeSaved = newJoke
+                PersistentContainer.shared.saveContext(backgroundContext: backgroundTask)
+            }
         }
     }
     
@@ -76,6 +102,7 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
     
     @IBAction func newJokePushed(_ sender: Any) {
+        saveJokeButton.isSelected = false
         loadNewJoke()
     }
     
@@ -84,14 +111,27 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     }
     
     func loadNewJoke() {
-        saveJokeButton.isSelected = false
-        manager.fetchJoke() { result in
-            switch result {
-            case let .success(response):
-                self.thisJoke = response
-                self.pushDataToView()
-            case let .failure(error):
-                print(error)
+        print(self.thisCategory)
+        if self.thisCategory == "any" {
+            saveJokeButton.isSelected = false
+            manager.fetchJoke() { result in
+                switch result {
+                case let .success(response):
+                    self.thisJoke = response
+                    self.pushDataToView()
+                case let .failure(error):
+                    print(error)
+                }
+            }
+        } else {
+            manager.fetchJokeCategory(self.thisCategory) { result in
+                switch result {
+                case let .success(response):
+                    self.thisJoke = response
+                    self.pushDataToView()
+                case let .failure(error):
+                    print(error)
+                }
             }
         }
     }
@@ -100,6 +140,35 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
 extension ViewController: SavedJokesViewControllerDelegate {
     func goBack() {
         dismiss(animated: true)
+    }
+}
+
+extension ViewController: UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 17
+    }
+    
+    
+}
+
+extension ViewController: UIPickerViewDelegate {
+    internal func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if row < self.categories.count {
+            return self.categories[row]
+        } else {
+            return self.categories[0]
+        }
+    }
+    internal func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if row < self.categories.count {
+            self.thisCategory = self.categories[row]
+        } else {
+            self.thisCategory = self.categories[0]
+        }
     }
 }
 
